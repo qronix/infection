@@ -1,0 +1,38 @@
+Infection simulator:
+
+Purpose: Test the spreading of a virus within a virtual environment
+
+Intent: Healthy 'cells' will be denoted as green boxes in a grid. Each cell will have certain properties which determines their 'resistance' and ability to 'recover' from
+an infection. 
+
+Viruses will work behind the scenes to infect the cells and spread through out the system. Cells that have become infected will begin to glow red with increasing intensity depending on their infection level. Once a cell is completely infected, the cell will be solid red and pulsing. When a cell is totally infected, the virus can then use the compromised cell to spread to neighboring cells and repeat the process. If a cell cannot recover from the infection after a certain amount of time, the cell will slowly fade to black. Once the cell is completely black the cell is considered 'dead', if the cell is dead, a virus cannot use the cell to spread. If the virus cannot spread to any cells either due to cellular death or because of cellular resistance to the virus, the virus will die and spreading of the infection will stop.
+If the virus is dead, healthy cells will start to regenerate the cells around them, essentially bringing them back from the dead.
+
+
+Cells:
+
+ - green if healthy
+ - red if infected
+ - intensity of red grows with level of infection
+ - once cell is fully infected, it will glow red and pulse
+ - if a cell is infected for too long and is unable to recover, the cell will 'die'
+ - a cell turns black when it is dead
+ - dead cells cannot be used to spread a virus
+
+ Virus:
+
+ - works behind the scenes to infect healthy cells
+ - does not infect dead cells
+ - does not infect already infected cells
+ - tries to spread to neighboring cells
+ - if all cells are dead, the virus wins and infected cells remain infected
+ - if the virus cannot spread to a healthy cell, the virus remains in its cell until c
+ cell death
+
+ System manager:
+
+ - creates viruses
+ - determines if a virus can spread
+ - manages cells
+ - updates the display
+ 

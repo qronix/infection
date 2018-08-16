@@ -1,0 +1,34 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+#virusDish{
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    /* flex-flow: row wrap; */
+    justify-content: space-between;
+    border:1px solid #8e44ad;
+    margin:0 30%;
+    margin-top:20vh;
+    /* height: 50vh; */
+}
+.cellElement{
+    padding: 0;
+    flex: 1 1 calc(12.5% - 5px);
+    background-color: #2ecc71;
+    border:1px solid #9b59b6;
+    /* max-width: 40px; */
+    height: 40px;
+}
+
+.infoWindow{
+    position: absolute;
+    padding: 5px;
+    box-shadow: 1px 1px 4px rgb(0,0,0);
+    /* display: flex; */
+    background-color:rgba(0,0,0,0.7);
+    color:white;
+    transform: translate(40px,40px);
+}
