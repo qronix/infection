@@ -12,12 +12,24 @@
     <script src='systemManager.js'></script>
 </head>
 <body>
-    <div id='virusDish'>
+    <div id='gameContainer'>
+        <div id='virusDish'>
+        </div>
+        <div id='interface'>
+            <a href='#' id='startVirus'>Launch Virus</a>
+        </div>
     </div>
+
+
     <script type='text/javascript'>
         var sysMan = new systemManager(64);
         sysMan.setupCellGroup();
         Setup(sysMan);
+        var launchBtn = document.getElementById('startVirus');
+        launchBtn.addEventListener('click',function(e){
+            sysMan.begin();
+            e.preventDefault();
+        });
     </script>
 </body>
 </html>
