@@ -36,3 +36,11 @@ Cells:
  - manages cells
  - updates the display
  
+
+ ToDo:
+
+ - Implement checking for border cells. Currently the virus will 
+ spread to non adjacent cells due to border cells being within the
+ numerical range for adjacent cells.
+
+ 

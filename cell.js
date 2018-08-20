@@ -41,7 +41,8 @@ class Cell{
             health: this.health,
             resistance: this.resistance,
             status: this.status,
-            infected: this.infected
+            infected: this.infected,
+            cellId: this.cellId
         }
         return cellInfo;
     }

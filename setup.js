@@ -1,8 +1,8 @@
 function Setup(systemManager){
     var targetArea = document.getElementById('virusDish');
-    for(let i=0; i<64; i++){
+    for(let i=0; i<systemManager.cellGroupWidth**2; i++){
         let cellElement = document.createElement('div');
-        cellElement.id = i;
+        cellElement.id = i+1;
         cellElement.addEventListener('mouseenter',function(){
             systemManager.displayCellInfo(cellElement,cellElement.id);
         });

@@ -1,11 +1,16 @@
 class systemManager{
-    constructor(cellGroupSize){
-        this.cellGroupSize = cellGroupSize;
-        this.cellGroup = [];
+    constructor(groupWidth){
+        if(Number.isInteger(groupWidth)){
+            this.cellGroupWidth = groupWidth;
+            this.cellGroupSize = groupWidth**2;
+            this.cellGroup = [];
+        }else{
+            console.log(`${groupWidth} is an invalid width!`);
+        }
     }
     setupCellGroup(){
         for(let i=0; i<this.cellGroupSize; i++){
-            let cellObj = Cell.generateCell(i);
+            let cellObj = Cell.generateCell(i+1);
             cellObj.name = `Cell ${i+1}`;
             this.cellGroup.push(new Cell(cellObj));
         }
@@ -32,8 +37,8 @@ class systemManager{
         cellElement.removeChild(target);
     }
     begin(){
-        let virusCellStart = Math.floor(Math.random()*this.cellGroup.length-1);
-        this.cellGroup[virusCellStart].setInfected(true);
+        let virusStartCellId = 0;//Math.floor(Math.random()*this.cellGroup.length-1);
+        this.cellGroup[virusStartCellId].setInfected(true);
         this.updateSystem();
     }
      updateSystem(){
@@ -41,11 +46,13 @@ class systemManager{
             this.cellGroup.forEach((cell)=>{
                 this.updateCell(cell);
             });
-        },100);
+        },500);
     }
     //implement async await with promises here to make for a smoother infection
     updateCell(cell){
         if(cell.infected){
+            //can be leftSide, rightSide, or neither
+            var isBorderCell = this.checkIfBorderCell(cell.cellId);
 
             //check if surrounding cells can be infected
             this.updateCellDisplay(cell.cellId);
@@ -60,14 +67,59 @@ class systemManager{
                 bottomLeft:  (cell.cellId + 7),
                 left:        (cell.cellId - 1)
             }
+            
+            //implementing checks for border cells
+            
+            if(isBorderCell==='leftSide'){
+                delete surroundingCells.topLeft;
+                delete surroundingCells.bottomLeft;
+                delete surroundingCells.left;
+            }
+            if(isBorderCell === 'rightSide'){
+                delete surroundingCells.topRight;
+                delete surroundingCells.right;
+                delete surroundingCells.bottomRight;
+            }
+            console.log(`Cell id: ${cell.cellId}`);
+            console.log(`isBorderCell: ${isBorderCell}`);
+            console.log('Surrounding cells: ');
+            console.dir(surroundingCells);
+
             for(let nearCell in surroundingCells){
-                if(this.cellGroup[surroundingCells[nearCell]] !== undefined){
+                console.dir(this.cellGroup[surroundingCells[nearCell]]);
+                if(this.cellGroup[surroundingCells[nearCell]] !== undefined &&
+                this.cellGroup[surroundingCells[nearCell]].infected){
                     eligibleCells.push(surroundingCells[nearCell]);
                 }
             }
             let target = Math.floor(Math.random()*(eligibleCells.length));
             let targetId = eligibleCells[target];
             this.cellGroup[targetId].setInfected(true);
+        }
+    }
+
+    checkIfBorderCell(cellId){
+        let leftSideRangeMax  = (this.cellGroupWidth-1);
+        let leftSideRangeMin  = 0;
+        let rightSideRangeMax = this.cellGroupWidth;
+        let rightSideRangeMin = 1;
+
+        //leftSideCheck
+        let yValue = (cellId-1)/this.cellGroupWidth;
+        // console.log(`yValue is: ${yValue}`);
+        if(Number.isInteger(yValue)){
+            if(yValue>=leftSideRangeMin && yValue <= leftSideRangeMax){
+                return 'leftSide';
+            }
+        }else if(Number.isInteger(yValue)){
+            //right side check
+            let yValue = (cellId/this.cellGroupWidth);
+            if(yValue>=rightSideRangeMin && yValue <= rightSideRangeMax){
+                return 'rightSide';
+            }
+        }
+        else{
+            return 'neither';
         }
     }
 
