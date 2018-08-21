@@ -1,11 +1,12 @@
 class Cell{
     constructor(cellObj){
-        this.health     = cellObj.health;
-        this.name       = cellObj.name;
-        this.resistance = cellObj.resistance;
-        this.status     = cellObj.status;
-        this.infected   = cellObj.infected;
-        this.cellId     = cellObj.cellId;
+        this.health         = cellObj.health;
+        this.name           = cellObj.name;
+        this.resistance     = cellObj.resistance;
+        this.status         = cellObj.status;
+        this.infected       = cellObj.infected;
+        this.cellId         = cellObj.cellId;
+        this.infectedAmount = 0;
     }
 
     static generateCell(iD){
@@ -32,6 +33,7 @@ class Cell{
             infected,
             cellId
         }
+        console.log(`Cell ${cellId} was created`);
         return (returnObj);
     }
 
@@ -42,6 +44,7 @@ class Cell{
             resistance: this.resistance,
             status: this.status,
             infected: this.infected,
+            infection: this.infectedAmount,
             cellId: this.cellId
         }
         return cellInfo;
