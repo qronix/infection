@@ -38,7 +38,7 @@ class systemManager{
         cellElement.removeChild(target);
     }
     begin(){
-        let virusStartCellId = 31;//Math.floor(Math.random()*this.cellGroup.length-1);
+        let virusStartCellId = Math.floor(Math.random()*this.cellGroup.length-1);
         this.cellGroup[virusStartCellId].setInfected(true);
         this.updateSystem();
     }
@@ -57,7 +57,7 @@ class systemManager{
             if(this.infectedCellCount===this.cellGroupSize){
                 clearInterval(id);
             }
-        },500);
+        },100);
         var displayId = setInterval(()=>{
             this.updateGameDisplay();
         },100);
@@ -72,8 +72,12 @@ class systemManager{
         this.infectedCellCount = infectionCount;
     }
     //implement async await with promises here to make for a smoother infection
-    updateCell(cell){
-        if(cell.infected){
+    async updateCell(cell){
+        if(cell.infected && cell.infectedAmount<100){
+            await this.manageInfection(cell);
+            console.log('Infection processed!');
+        }
+        if(cell.infectedAmount === 100){ //change to infection amount 100%
             //can be leftSide, rightSide, or neither
             var isBorderCell = this.checkIfBorderCell(cell.cellId);
             // console.log(`Cell id ${cell.cellId} Border status: ${isBorderCell}`);
@@ -124,6 +128,65 @@ class systemManager{
                 // console.log(`Target id: ${targetId}`);
                 this.cellGroup[targetId].setInfected(true);
             }
+        }
+    }
+
+    manageInfection(cell){
+        return new Promise(resolve => {
+            let redAmt = 0;
+            let cellHtmlId = cell.cellId - 1;
+            let target = document.getElementById(cellHtmlId);
+            let greenAmt = 204;
+            let maxGreenAmt = 204;
+            let cellHealth = cell.health;
+            let cellResistance = cell.resistance;
+            let infectionAmt   = cell.infectedAmount;
+            let virusStrength  = 8;
+            let immune    = this.checkForImmunity(cell.resistance, virusStrength);
+            if(immune){
+                console.log('Cell is immune to virus!');
+                cell.infected = false;
+                return;
+            }else{
+                let id = setTimeout(function(){
+                    infectionAmt += Math.abs(virusStrength-cellResistance); 
+                    if(infectionAmt>=100){
+                        infectionAmt=100;
+                        console.log('Cell is fully infected!');
+                        clearInterval(id);
+                    }
+                    if(greenAmt>maxGreenAmt){
+                        greenAmt = maxGreenAmt;
+                    }
+                    if(greenAmt>0){
+                        greenAmt -= Math.abs(Math.floor(infectionAmt*2));
+                    }
+                    if(greenAmt<0){
+                        greenAmt = 0;
+                    }
+                    if(redAmt<256){
+                        Math.abs(Math.floor((infectionAmt*2)+56));
+                    }
+                    if(redAmt>256){
+                        redAmt = 256;
+                    }
+                    cell.setInfectionAmt(infectionAmt);
+                    console.log(`Infection amt: ${infectionAmt}`);
+                    console.log(`Red amt: ${redAmt}`);
+                    console.log(`Green amt: ${greenAmt}`);
+                    target.style.backgroundColor = `rgb(${redAmt},${greenAmt},0)`;
+                
+                },100);
+            }
+        });
+    }
+
+    checkForImmunity(cellResistance, virusStrength){
+        let immunity = (virusStrength-cellResistance);
+        if(immunity<=0){
+            return true; //cell is immune
+        }else{
+            return false; //cell is not immune
         }
     }
 

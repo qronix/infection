@@ -56,4 +56,7 @@ class Cell{
     setInfected(infected){
         this.infected = infected;
     }
+    setInfectionAmt(infectionAmt){
+        this.infectedAmount = infectionAmt;
+    }
 }
