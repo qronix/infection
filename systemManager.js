@@ -117,7 +117,10 @@ class systemManager{
                 // console.dir(this.cellGroup[surroundingCells[nearCell]]);
                 if(this.cellGroup[surroundingCells[nearCell]] !== undefined &&
                 !this.cellGroup[surroundingCells[nearCell]].infected){
-                    eligibleCells.push(surroundingCells[nearCell]);
+                    let cellRes = this.cellGroup[surroundingCells[nearCell]].resistance;
+                    if(!this.checkForImmunity(cellRes,8)){
+                        eligibleCells.push(surroundingCells[nearCell]);
+                    }
                 }
             }
             if(eligibleCells.length>0){
@@ -226,5 +229,12 @@ class systemManager{
     updateGameDisplay(){
         let cellInfectionCount = document.getElementById('cellInfectionCount');
         cellInfectionCount.innerText = this.infectedCellCount;
+    }
+    clearCellInfoWindows(){
+        //find all info windows
+        let infoWindows = document.querySelectorAll('.infowindow');
+        Array.from(infoWindows).forEach((window)=>{
+            window.parentNode.removeChild(window);
+        });
     }
 }
